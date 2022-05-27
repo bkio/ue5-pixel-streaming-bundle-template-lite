@@ -1,0 +1,3 @@
+[submodule "PixelStreamingServer"]
+	path = PixelStreamingServer
+	url = git@github.com:bkio/ue5-pixel-streaming-server-lite.git

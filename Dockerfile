@@ -32,14 +32,8 @@ RUN npm install .
 
 USER ue4
 
-# Expose TCP port 8080 for player WebSocket connections and web server HTTP access
-EXPOSE 8080
-
-# Google stun
-EXPOSE 19302
-
-# Turn coturn
-EXPOSE 19303
+# Use --network host instead of EXPOSEs. For best network performance and also it is tricky to find out what to expose for ICE connection.
+# Example run usage: docker run -it --rm --gpus all --network host -e HTTP_PORT=8000 -e STREAMER_PORT=9000 -e TURN_PORT=10000 gcr.io/my-project/my-image
 
 # Set the packaged project as the container's entrypoint
-ENTRYPOINT ["/opt/pixel_streaming_bundle/RunEnv.sh", "-PixelStreamingURL=ws://localhost:8888", "-RenderOffScreen", "-UseHyperThreading", "-ResX=1920", "-ResY=1080", "-Windowed", "-ForceRes", "-Unattended"]
+ENTRYPOINT ["/opt/pixel_streaming_bundle/RunEnv.sh"]

@@ -3,19 +3,19 @@
 # TURN setup starts
 publicip=$(curl -s http://api.ipify.org)
 localip=$(hostname -I | awk '{print $1}')
-turnport="19303"
+turnport=$TURN_PORT
 turnserveraddress="${publicip}:${turnport}"
 turnusername="PixelStreamingUser"
 turnpassword="AnotherTURNintheroad"
 realm="PixelStreaming"
-arguments="-p ${turnport} -r $realm -X $publicip -E $localip -L $localip --no-cli --no-tls --no-dtls --pidfile /var/run/turnserver.pid -f -a -v -n -u ${turnusername}:${turnpassword}"
-turnserver $arguments & # Start the turn server (coturn)
+arguments_1="-p ${turnport} -r $realm -X $publicip -E $localip -L $localip --no-cli --no-tls --no-dtls --pidfile /var/run/turnserver.pid -f -a -v -n -u ${turnusername}:${turnpassword}"
+turnserver $arguments_1 & # Start the turn server (coturn)
 stunserver="stun.l.google.com:19302"
 peerconnectionoptions="{\"iceServers\":[{\"urls\":[\"stun:$stunserver\",\"turn:$turnserveraddress\"],\"username\":\"$turnusername\",\"credential\":\"$turnpassword\"}]}"
 # TURN setup ends
 
 cd /opt/pixel_streaming_bundle/PixelStreamingServer
-node cirrus --peerConnectionOptions=\"$peerconnectionoptions\" &
+node cirrus --peerConnectionOptions=\"$peerconnectionoptions\" --HttpPort=$HTTP_PORT --StreamerPort=$STREAMER_PORT &
 
 cd /opt/pixel_streaming_bundle/CompiledProject
 
@@ -49,4 +49,5 @@ fi
 
 #chmod +x $UE_PROJECT_BINARY
 
-$UE_PROJECT_BINARY $UE_PROJECT_NAME "$@"
+arguments_2="-PixelStreamingURL=ws://localhost:${STREAMER_PORT} -RenderOffScreen -UseHyperThreading -ResX=1920 -ResY=1080 -Windowed -ForceRes -Unattended"
+$UE_PROJECT_BINARY $UE_PROJECT_NAME $arguments_2

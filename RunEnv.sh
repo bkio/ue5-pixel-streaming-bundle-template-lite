@@ -49,5 +49,5 @@ fi
 
 #chmod +x $UE_PROJECT_BINARY
 
-arguments_2="-PixelStreamingURL=ws://localhost:${STREAMER_PORT} -RenderOffScreen -UseHyperThreading -ResX=1920 -ResY=1080 -Windowed -ForceRes -Unattended"
+arguments_2="-PixelStreamingURL=ws://localhost:${STREAMER_PORT} -RenderOffScreen -UseHyperThreading -ResX=1920 -ResY=1080 -Windowed -ForceRes -Unattended -AllowPixelStreamingCommands"
 $UE_PROJECT_BINARY $UE_PROJECT_NAME $arguments_2
